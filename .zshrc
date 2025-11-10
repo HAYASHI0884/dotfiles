@@ -197,7 +197,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # mise
-eval "$(~/.local/bin/mise activate zsh)"
+# eval "$(~/.local/bin/mise activate zsh)"
+# brew版mise
+eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate zsh)"
 
 # github cli
 eval "$(gh completion -s zsh)"
