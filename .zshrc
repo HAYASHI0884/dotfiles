@@ -188,6 +188,7 @@ mv_to_trash() {
   done
 }
 
+# brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # nvm
@@ -200,4 +201,3 @@ eval "$(~/.local/bin/mise activate zsh)"
 
 # github cli
 eval "$(gh completion -s zsh)"
-
