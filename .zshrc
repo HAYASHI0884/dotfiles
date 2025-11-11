@@ -176,7 +176,7 @@ mv_to_trash() {
   # トラッシュディレクトリ
   local trash_dir=~/trash
   mkdir -p "$trash_dir"
-  
+
   # 引数のファイル/ディレクトリをすべて移動
   for target in "$@"; do
     if [ -e "$target" ]; then
@@ -196,8 +196,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# mise
-# eval "$(~/.local/bin/mise activate zsh)"
 # brew版mise
 eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate zsh)"
 
