@@ -201,3 +201,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate zsh)"
 
 # github cli
 eval "$(gh completion -s zsh)"
+
+# laravel sail
+alias sail="./vendor/bin/sail"
+
