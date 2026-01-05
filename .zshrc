@@ -122,7 +122,8 @@ alias d='docker'
 alias dc='docker compose'
 alias de='docker exec -it $(docker ps | peco | awk "{print \$1}") bash'
 alias desh='docker exec -it $(docker ps | peco | awk "{print \$1}") sh'
-alias dcu='docker compose up -d'
+alias dcu='docker compose up'
+alias dcud='docker compose up -d'
 alias dcd='docker compose down'
 
 # ctrl+d でのログアウト対策
