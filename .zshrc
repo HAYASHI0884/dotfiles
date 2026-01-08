@@ -109,10 +109,11 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # alias
-alias vim=nvim
-alias vi=nvim
-alias clip=clip.exe
+alias vim='nvim'
+alias vi='nvim'
+alias clip='clip.exe'
 alias rm='mv_to_trash'
+alias lg='lazygit'
 
 # zsh の補完機能有効化
 autoload -Uz compinit && compinit -u
@@ -205,4 +206,3 @@ eval "$(gh completion -s zsh)"
 
 # laravel sail
 alias sail="./vendor/bin/sail"
-
