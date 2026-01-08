@@ -49,6 +49,7 @@ cd ~/dotfiles
 - **nvm**: Node.js バージョン管理ツール
 - **ctop**: コンテナ監視ツール
 - **peco**: インタラクティブなフィルタリングツール
+- **lazygit**: Git クライアント
 - **Oh My Zsh**: zsh 設定フレームワーク
 - **zsh-syntax-highlighting**: シンタックスハイライトプラグイン
 - **zsh-autosuggestions**: 自動補完プラグイン

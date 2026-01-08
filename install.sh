@@ -210,12 +210,13 @@ main() {
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
     fi
 
-    # READMEに記載されているツール（brewでインストール可能なもの）
+    # brewでインストール可能なもの
     install_with_brew "nvim"
     install_with_brew "gh"
     install_with_brew "mise"
     install_with_brew "ctop"
     install_with_brew "peco"
+    install_with_brew "lazygit"
 
     # nvmのインストール（gitから）
     install_nvm
