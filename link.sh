@@ -9,7 +9,7 @@ create_symlink() {
   local source_file=$(realpath $1)
   local destination_path=$2
 
-  backup_file="${destination_path}.bk"     # 退避先のファイル名
+  backup_file="${destination_path}.bk.$(date +%Y%m%d%H%M%S)"     # 退避先のファイル名
 
   if [ -e "$destination_path" ]; then
     mv "$destination_path" "$backup_file"
