@@ -1,13 +1,17 @@
 #!/bin/zsh
 
+# スクリプトのディレクトリを取得（絶対パス）
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+PROJECT_ROOT=$(dirname "$SCRIPT_DIR")
+
 files_and_paths=(
-    ".zshrc":"$HOME/.zshrc"
-    "serena_config.yml":"$HOME/.serena/serena_config.yml"
-    "mcp.json":"$HOME/.cursor/mcp.json"
+    "$PROJECT_ROOT/.zshrc":"$HOME/.zshrc"
+    "$PROJECT_ROOT/serena_config.yml":"$HOME/.serena/serena_config.yml"
+    "$PROJECT_ROOT/mcp.json":"$HOME/.cursor/mcp.json"
 )
 
 create_symlink() {
-  local source_file=$(realpath $1)
+  local source_file=$(realpath "$1")
   local destination_path=$2
 
   backup_file="${destination_path}.bk.$(date +%Y%m%d%H%M%S)"     # 退避先のファイル名
