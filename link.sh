@@ -3,6 +3,7 @@
 files_and_paths=(
     ".zshrc":"$HOME/.zshrc"
     "serena_config.yml":"$HOME/.serena/serena_config.yml"
+    "mcp.json":"$HOME/.cursor/mcp.json"
 )
 
 create_symlink() {
