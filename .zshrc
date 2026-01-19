@@ -206,3 +206,6 @@ eval "$(gh completion -s zsh)"
 
 # laravel sail
 alias sail="./vendor/bin/sail"
+
+# uv
+eval "$(uv generate-shell-completion zsh)"

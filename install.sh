@@ -217,6 +217,7 @@ main() {
     install_with_brew "ctop"
     install_with_brew "peco"
     install_with_brew "lazygit"
+    install_with_brew "uv"
 
     # nvmのインストール（gitから）
     install_nvm
