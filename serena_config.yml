@@ -92,4 +92,5 @@ token_count_estimator: CHAR_COUNT
 # estimate the token count using the Claude Sonnet 4 tokenizer.
 
 # The list of registered project paths (updated automatically).
-projects: []
+projects:
+- /home/hayashi/dotfiles
