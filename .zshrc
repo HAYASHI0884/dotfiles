@@ -209,3 +209,6 @@ alias sail="./vendor/bin/sail"
 
 # uv
 eval "$(uv generate-shell-completion zsh)"
+
+# claude code
+alias claude="~/.local/bin/claude"
