@@ -169,6 +169,15 @@
         "--project-from-cwd"
       ],
       "env": {}
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--yes",
+        "@upstash/context7-mcp"
+      ],
+      "env": {}
     }
   }
 }
