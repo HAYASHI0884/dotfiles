@@ -95,6 +95,33 @@ install_with_brew() {
     fi
 }
 
+# curl経由でインストール（汎用関数）
+# 使用例: install_with_curl "tool_name" "check_command" "https://example.com/install.sh"
+install_with_curl() {
+    local name=$1
+    local check_cmd=$2
+    local url=$3
+
+    log_info "Checking for $name..."
+
+    if command_exists "$check_cmd"; then
+        log_warn "$name is already installed. Skipping."
+        SKIPPED+=("$name")
+        return 0
+    fi
+
+    log_info "Installing $name..."
+    if curl -fsSL "$url" | bash; then
+        log_success "$name installed successfully"
+        INSTALLED+=("$name")
+        return 0
+    else
+        log_error "Failed to install $name"
+        FAILED+=("$name")
+        return 1
+    fi
+}
+
 # nvmのインストール
 install_nvm() {
     log_info "Checking for nvm..."
@@ -221,6 +248,9 @@ main() {
 
     # nvmのインストール（gitから）
     install_nvm
+
+    # curl経由でインストールするツール
+    install_with_curl "claude-code" "claude" "https://claude.ai/install.sh"
 
     # oh-my-zshのインストール
     install_ohmyzsh
