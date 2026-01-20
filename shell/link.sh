@@ -6,9 +6,7 @@ PROJECT_ROOT=$(dirname "$SCRIPT_DIR")
 
 files_and_paths=(
     "$PROJECT_ROOT/.zshrc":"$HOME/.zshrc"
-    "$PROJECT_ROOT/serena_config.yml":"$HOME/.serena/serena_config.yml"
     "$PROJECT_ROOT/mcp.json":"$HOME/.cursor/mcp.json"
-    "$PROJECT_ROOT/.claude.json":"$HOME/.claude.json"
 )
 
 create_symlink() {
