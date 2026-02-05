@@ -3,11 +3,22 @@
 ## シェルスクリプト
 
 ### install.sh
+
 - 必要なツールを一括インストールするスクリプト。
 - 既にインストール済みのツールは自動的にスキップされる。
 
 ### link.sh
+
 設定ファイルのシンボリックリンクを作成するスクリプト。
+
+## cursor関連
+
+- 拡張機能のリスト作成
+  `cursor --list-extensions > cursor/cursor-extensions.txt`
+- 拡張機能のインストール
+  `cat cursor-extensions.txt | xargs -n 1 cursor --install-extension`
+- 設定ファイル置き場(Windows)
+  `C:\Users\{User名}\AppData\Roaming\Cursor\User`
 
 ## 参考
 

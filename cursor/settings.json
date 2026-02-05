@@ -1,0 +1,76 @@
+{
+  "livePreview.autoRefreshPreview": "On Changes to Saved Files",
+  "vscodeGoogleTranslate.preferredLanguage": "Japanese",
+  "indentRainbow.indicatorStyle": "light",
+  "indentRainbow.lightIndicatorStyleLineWidth": 1,
+  "editor.guides.indentation": true,
+  "editor.guides.highlightActiveIndentation": true,
+  "indentRainbow.colors": [
+    "rgba(255,255,64,0.6)",
+    "rgba(127,255,127, 0.6)",
+    "rgba(255,127,255, 0.6)",
+    "rgba(79,236,236, 0.6)"
+  ],
+  "vscodeGoogleTranslate.HoverTranslations": true,
+  "security.allowedUNCHosts": ["wsl.localhost"],
+  "LaravelExtraIntellisense.basePath": "/var/www/vhosts",
+  "LaravelExtraIntellisense.basePathForCode": "docker exec -w /var/www/vhost docker-lvnmatch-php74-fpm-1 php -r \"{code}\"",
+  "git.openRepositoryInParentFolders": "never",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "vsicons.dontShowNewVersionMessage": true,
+  "markdown-preview-enhanced.previewTheme": "github-dark.css",
+  "markdown-preview-enhanced.codeBlockTheme": "auto.css",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "Git Bash": {
+      "source": "Git Bash"
+    },
+    "rancher-desktop (WSL)": {
+      "path": "C:\\Windows\\System32\\wsl.exe",
+      "args": ["-d", "rancher-desktop"]
+    },
+    "Ubuntu (WSL)": {
+      "path": "C:\\WINDOWS\\System32\\wsl.exe",
+      "args": ["-d", "Ubuntu"]
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+  "markdown-preview-enhanced.enablePreviewZenMode": false,
+  "cursor.cpp.disabledLanguages": ["plaintext", "markdown", "scminput"],
+  "terminal.integrated.defaultProfile.linux": "",
+  "workbench.colorTheme": "Default Dark+",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.activityBar.orientation": "vertical",
+  "php.validate.executablePath": "/home/hayashi/.local/bin/php82.sh",
+  "git.autofetch": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "files.insertFinalNewline": true,
+  "gitlens.ai.model": "gitkraken",
+  "gitlens.ai.vscode.model": "copilot:gpt-3.5-turbo",
+  "files.trimTrailingWhitespace": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.trimFinalNewlines": true,
+  "githubPullRequests.terminalLinksHandler": "github",
+  "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
+  "laravel-pint.enable": true,
+  "editor.formatOnSave": true,
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.selectedModel": "sonnet"
+}
