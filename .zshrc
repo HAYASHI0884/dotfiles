@@ -112,7 +112,6 @@ source $ZSH/oh-my-zsh.sh
 alias vim='nvim'
 alias vi='nvim'
 alias clip='clip.exe'
-alias rm='mv_to_trash'
 alias lg='lazygit'
 
 # zsh の補完機能有効化
@@ -172,23 +171,6 @@ bindkey '^r' peco-select-history
 # branchの選択をpecoで行うためのalias
 alias -g B='`git branch -a | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
 alias -g R='`git remote | peco --prompt "GIT REMOTE>" | head -n 1`'
-
-# rmコマンドでゴミ箱へ移動
-mv_to_trash() {
-  # トラッシュディレクトリ
-  local trash_dir=~/trash
-  mkdir -p "$trash_dir"
-
-  # 引数のファイル/ディレクトリをすべて移動
-  for target in "$@"; do
-    if [ -e "$target" ]; then
-      # タイムスタンプ付きで移動して重複を回避
-      mv "$target" "$trash_dir/$(basename "$target")_$(date +%Y%m%d%H%M%S)"
-    else
-      echo "Error: '$target' does not exist." >&2
-    fi
-  done
-}
 
 # brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
