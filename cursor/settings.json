@@ -72,5 +72,6 @@
   "laravel-pint.enable": true,
   "editor.formatOnSave": true,
   "claudeCode.preferredLocation": "panel",
-  "claudeCode.selectedModel": "sonnet"
+  "claudeCode.selectedModel": "sonnet",
+  "git.pruneOnFetch": true
 }

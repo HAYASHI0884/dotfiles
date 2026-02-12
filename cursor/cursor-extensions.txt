@@ -1,3 +1,4 @@
+WSL: Ubuntu にインストールされている拡張機能:
 amiralizadeh9480.laravel-extra-intellisense
 anthropic.claude-code
 anysphere.cursorpyright
