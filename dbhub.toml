@@ -1,0 +1,9 @@
+# ~/.dbhub.tomlにコピー
+[[sources]]
+id = "local"
+dsn = "mysql://{user}:{password}@localhost:3306"
+
+[[tools]]
+name = "execute_sql"
+source = "local"
+readonly = true

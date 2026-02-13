@@ -1,27 +1,35 @@
 {
-    // ~/.claude.json の "mcpServers" に下記の内容を追加する
-    "mcpServers": {
-        "serena": {
-        "type": "stdio",
-        "command": "uvx",
-        "args": [
-            "--from",
-            "git+https://github.com/oraios/serena",
-            "serena",
-            "start-mcp-server",
-            "--context=claude-code",
-            "--project-from-cwd"
-        ],
-        "env": {}
-        },
-        "context7": {
-        "type": "stdio",
-        "command": "npx",
-        "args": [
-            "--yes",
-            "@upstash/context7-mcp"
-        ],
-        "env": {}
-        }
-    }
+  // ~/.claude.json の "mcpServers" に下記の内容を追加する
+  "mcpServers": {
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context=claude-code",
+        "--project-from-cwd",
+      ],
+      "env": {},
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["--yes", "@upstash/context7-mcp"],
+      "env": {},
+    },
+    "dbhub": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@bytebase/dbhub",
+        "--transport",
+        "stdio",
+        "--config",
+        "~/dbhub.toml",
+      ],
+    },
+  },
 }
