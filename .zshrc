@@ -194,3 +194,10 @@ eval "$(uv generate-shell-completion zsh)"
 
 # claude code
 alias claude="~/.local/bin/claude"
+export CLAUDE_CODE_SKIP_WINDOWS_PROFILE=1
+if [ -d "/mnt/c/Users/$(whoami)" ]; then
+  export USERPROFILE="/mnt/c/Users/$(whoami)"
+else
+  WIN_USER=$(ls /mnt/c/Users | grep -v -E 'Public|Default|All Users|defaultuser0|desktop.ini|user' | head -n1)
+  export USERPROFILE="/mnt/c/Users/$WIN_USER"
+fi
