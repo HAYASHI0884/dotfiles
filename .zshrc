@@ -147,18 +147,6 @@ setopt auto_cd
 # テキストをペーストした際に不要な文字列を付与しない
 unset zle_bracketed_paste
 
-# git関連(テーマでブランチを表示できるならコメントアウト)
-#GIT_PS1_SHOWDIRTYSTATE=true
-#GIT_PS1_SHOWUNTRACKEDFILES=true
-#GIT_PS1_SHOWSTASHSTATE=true
-#GIT_PS1_SHOWUPSTREAM=auto
-
-#source ~/.git-prompt.sh
-#fpath=(~/.zsh $fpath)
-#zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
-#setopt PROMPT_SUBST
-#PS1='%K{green}%n%k:%F{cyan}%~%f%F{yellow}$(__git_ps1 "(%s)")%f\$ '
-
 # ctrl+r で過去に実行したコマンドを選択できるようにする。
 function peco-select-history() {
   BUFFER=$(\history -n -r 1 | peco --query "$LBUFFER")
