@@ -189,3 +189,6 @@ else
   WIN_USER=$(ls /mnt/c/Users | grep -v -E 'Public|Default|All Users|defaultuser0|desktop.ini|user' | head -n1)
   export USERPROFILE="/mnt/c/Users/$WIN_USER"
 fi
+
+# ブラウザの指定(wsl)
+export BROWSER=/usr/bin/wslview
