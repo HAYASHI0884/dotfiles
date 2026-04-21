@@ -1,13 +1,18 @@
 // 既定値を上書きするには、このファイル内にキー バインドを挿入します
 [
-    {
-        "key": "ctrl+oem_7",
-        "command": "md-shortcut.toggleStrikethrough",
-        "when": "config.markdownShortcuts.icons.strikethrough && markdownShortcuts:enabled"
-    },
-    {
-        "key": "ctrl+l",
-        "command": "claude-vscode.editor.openLast",
-        "when": "!config.claudeCode.useTerminal"
-    }
+  {
+    "key": "ctrl+oem_7",
+    "command": "md-shortcut.toggleStrikethrough",
+    "when": "config.markdownShortcuts.icons.strikethrough && markdownShortcuts:enabled"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "claude-vscode.editor.openLast",
+    "when": "!config.claudeCode.useTerminal"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "claude-vscode.terminal.open",
+    "when": "config.claudeCode.useTerminal"
+  }
 ]

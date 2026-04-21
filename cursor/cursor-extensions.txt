@@ -4,6 +4,7 @@ anthropic.claude-code
 anysphere.cursorpyright
 aswinkumar863.smarty-template-support
 bmewburn.vscode-intelephense-client
+bungcip.better-toml
 christian-kohler.npm-intellisense
 christian-kohler.path-intellisense
 codingyu.laravel-goto-view

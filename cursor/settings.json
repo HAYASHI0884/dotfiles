@@ -71,7 +71,9 @@
   "gitlens.ai.gitkraken.model": "gemini:gemini-2.0-flash",
   "laravel-pint.enable": true,
   "editor.formatOnSave": true,
-  "claudeCode.preferredLocation": "panel",
-  "claudeCode.selectedModel": "sonnet",
-  "git.pruneOnFetch": true
+  "claudeCode.selectedModel": "default",
+  "git.pruneOnFetch": true,
+  "claudeCode.useCtrlEnterToSend": true,
+  "githubPullRequests.pullBranch": "never",
+  "claudeCode.preferredLocation": "panel"
 }
