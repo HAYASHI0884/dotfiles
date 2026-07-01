@@ -6,7 +6,7 @@ PROJECT_ROOT=$(dirname "$SCRIPT_DIR")
 
 files_and_paths=(
     "$PROJECT_ROOT/.zshrc":"$HOME/.zshrc"
-    "$PROJECT_ROOT/mcp.json":"$HOME/.cursor/mcp.json"
+    # "$PROJECT_ROOT/mcp/mcp.json":"$HOME/.cursor/mcp.json"
 )
 
 create_symlink() {
