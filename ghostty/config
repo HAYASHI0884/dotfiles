@@ -1,0 +1,12 @@
+# Ghostty configuration
+# https://ghostty.org/docs/config
+
+# フォント設定
+# font-size = 14
+
+# テーマ
+# theme = TokyoNight Night
+# theme = Kanagawa Dragon
+
+# 背景の透過
+background-opacity = 0.90

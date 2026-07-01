@@ -245,6 +245,7 @@ main() {
     install_with_brew "peco"
     install_with_brew "lazygit"
     install_with_brew "uv"
+    install_with_brew "tmux"
 
     # nvmのインストール（gitから）
     install_nvm
