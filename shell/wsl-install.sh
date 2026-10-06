@@ -2,6 +2,9 @@
 
 set -e
 
+# スクリプトのディレクトリを取得（絶対パス）
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
 # カラー出力用の変数
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -250,6 +253,26 @@ install_herdr_skill() {
     fi
 }
 
+# Claude CodeのMCPサーバーを登録（登録内容は claude-mcp.sh で管理）
+setup_claude_mcp() {
+    log_info "Checking for Claude Code..."
+
+    if ! command_exists claude && [ ! -x "$HOME/.local/bin/claude" ]; then
+        log_warn "Claude Code is not installed. Skipping MCP setup."
+        SKIPPED+=("claude-mcp")
+        return 0
+    fi
+
+    if zsh "$SCRIPT_DIR/claude-mcp.sh"; then
+        INSTALLED+=("claude-mcp")
+        return 0
+    else
+        log_error "Failed to set up Claude Code MCP servers"
+        FAILED+=("claude-mcp")
+        return 1
+    fi
+}
+
 # メイン処理
 main() {
     echo "=========================================="
@@ -299,6 +322,9 @@ main() {
         install_ohmyzsh_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting.git"
         install_ohmyzsh_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
     fi
+
+    # Claude CodeのMCPサーバーを登録
+    setup_claude_mcp
 
     # サマリー表示
     echo ""

@@ -13,6 +13,13 @@
 
 設定ファイルのシンボリックリンクを作成するスクリプト。
 
+### claude-mcp.sh
+
+- Claude CodeのMCPサーバーをユーザースコープ（`~/.claude.json`、全プロジェクト共通）に登録するスクリプト。
+- MCPサーバーの追加・変更は、スクリプト内の `add_mcp` の行を編集する。
+- 実行のたびに削除→登録し直すため、実行後はスクリプトの定義内容と一致する。
+- `mac-install.sh` / `wsl-install.sh` からも呼び出される（Claude Code未インストール時はスキップ）。
+
 ## VS Code / Cursor関連
 
 拡張機能のリストは、VS Codeは `vscode/vscode-extensions.txt`、Cursorは `cursor/cursor-extensions.txt` で管理する。
