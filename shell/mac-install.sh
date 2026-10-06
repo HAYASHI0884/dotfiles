@@ -202,6 +202,7 @@ main() {
     install_with_brew "lazygit"
     install_with_brew "uv"
     install_with_brew "tmux"
+    install_with_brew "herdr"
 
     # nvmはbrewでインストール（コマンド検出ではなくformulaで判定）
     install_nvm_with_brew
