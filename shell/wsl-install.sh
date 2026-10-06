@@ -219,6 +219,37 @@ install_zsh() {
     fi
 }
 
+# herdrのClaude Code用スキルを配置（herdr本体のバージョンに合わせて生成し、差分がある場合のみ更新）
+install_herdr_skill() {
+    local skill_file="$HOME/.claude/skills/herdr/SKILL.md"
+
+    log_info "Checking for herdr skill..."
+
+    if ! command_exists herdr; then
+        log_error "herdr is not installed. Please install herdr first."
+        FAILED+=("herdr-skill")
+        return 1
+    fi
+
+    if [ -f "$skill_file" ] && herdr --skill | cmp -s - "$skill_file"; then
+        log_warn "herdr skill is already up to date. Skipping."
+        SKIPPED+=("herdr-skill")
+        return 0
+    fi
+
+    log_info "Installing herdr skill to $skill_file..."
+    mkdir -p "$(dirname "$skill_file")"
+    if herdr --skill > "$skill_file"; then
+        log_success "herdr skill installed successfully"
+        INSTALLED+=("herdr-skill")
+        return 0
+    else
+        log_error "Failed to install herdr skill"
+        FAILED+=("herdr-skill")
+        return 1
+    fi
+}
+
 # メイン処理
 main() {
     echo "=========================================="
@@ -247,6 +278,9 @@ main() {
     install_with_brew "uv"
     install_with_brew "tmux"
     install_with_brew "herdr"
+
+    # herdrのClaude Code用スキルを配置
+    install_herdr_skill
 
     # nvmのインストール（gitから）
     install_nvm
