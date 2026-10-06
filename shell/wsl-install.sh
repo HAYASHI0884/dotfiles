@@ -222,35 +222,58 @@ install_zsh() {
     fi
 }
 
-# herdrのClaude Code用スキルを配置（herdr本体のバージョンに合わせて生成し、差分がある場合のみ更新）
-install_herdr_skill() {
-    local skill_file="$HOME/.claude/skills/herdr/SKILL.md"
+# Claude Code用スキルを ~/.claude/skills/<name> に配置（ツール本体のバージョンに合わせて生成し、差分がある場合のみ更新）
+# 生成関数は一時ディレクトリをカレントとして実行され、その中に .claude/skills/<name>/ を作成すること
+# 使用例: install_skill "skill_name" "required_command" generator_function
+install_skill() {
+    local name=$1
+    local required_cmd=$2
+    local generator=$3
+    local target_dir="$HOME/.claude/skills/$name"
+    local tmp_dir
 
-    log_info "Checking for herdr skill..."
+    log_info "Checking for $name skill..."
 
-    if ! command_exists herdr; then
-        log_error "herdr is not installed. Please install herdr first."
-        FAILED+=("herdr-skill")
+    if ! command_exists "$required_cmd"; then
+        log_error "$required_cmd is not installed. Please install $required_cmd first."
+        FAILED+=("$name-skill")
         return 1
     fi
 
-    if [ -f "$skill_file" ] && herdr --skill | cmp -s - "$skill_file"; then
-        log_warn "herdr skill is already up to date. Skipping."
-        SKIPPED+=("herdr-skill")
+    tmp_dir=$(mktemp -d)
+    if ! (cd "$tmp_dir" && "$generator") >/dev/null || [ ! -d "$tmp_dir/.claude/skills/$name" ]; then
+        rm -rf "$tmp_dir"
+        log_error "Failed to generate $name skill"
+        FAILED+=("$name-skill")
+        return 1
+    fi
+
+    if [ -d "$target_dir" ] && diff -r "$tmp_dir/.claude/skills/$name" "$target_dir" >/dev/null 2>&1; then
+        rm -rf "$tmp_dir"
+        log_warn "$name skill is already up to date. Skipping."
+        SKIPPED+=("$name-skill")
         return 0
     fi
 
-    log_info "Installing herdr skill to $skill_file..."
-    mkdir -p "$(dirname "$skill_file")"
-    if herdr --skill > "$skill_file"; then
-        log_success "herdr skill installed successfully"
-        INSTALLED+=("herdr-skill")
-        return 0
-    else
-        log_error "Failed to install herdr skill"
-        FAILED+=("herdr-skill")
-        return 1
-    fi
+    log_info "Installing $name skill to $target_dir..."
+    mkdir -p "$(dirname "$target_dir")"
+    rm -rf "$target_dir"
+    mv "$tmp_dir/.claude/skills/$name" "$target_dir"
+    rm -rf "$tmp_dir"
+    log_success "$name skill installed successfully"
+    INSTALLED+=("$name-skill")
+    return 0
+}
+
+# herdrのスキルを生成（herdr --skill の出力を SKILL.md として保存）
+generate_herdr_skill() {
+    mkdir -p .claude/skills/herdr
+    herdr --skill > .claude/skills/herdr/SKILL.md
+}
+
+# playwright-cliのスキルを生成（カレントディレクトリの .claude/skills/playwright-cli/ に出力される）
+generate_playwright_cli_skill() {
+    playwright-cli install --skills
 }
 
 # Claude CodeのMCPサーバーを登録（登録内容は claude-mcp.sh で管理）
@@ -301,9 +324,11 @@ main() {
     install_with_brew "uv"
     install_with_brew "tmux"
     install_with_brew "herdr"
+    install_with_brew "playwright-cli"
 
-    # herdrのClaude Code用スキルを配置
-    install_herdr_skill
+    # Claude Code用スキルの配置
+    install_skill "herdr" "herdr" generate_herdr_skill
+    install_skill "playwright-cli" "playwright-cli" generate_playwright_cli_skill
 
     # nvmのインストール（gitから）
     install_nvm
