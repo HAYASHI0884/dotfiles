@@ -277,6 +277,7 @@ main() {
     install_with_brew "ctop"
     install_with_brew "peco"
     install_with_brew "lazygit"
+    install_with_brew "git-delta"
     install_with_brew "uv"
     install_with_brew "tmux"
     install_with_brew "herdr"

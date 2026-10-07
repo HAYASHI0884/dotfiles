@@ -10,6 +10,7 @@ files_and_paths=(
     "$PROJECT_ROOT/ghostty/config":"$HOME/.config/ghostty/config"
     "$PROJECT_ROOT/tmux/tmux.conf":"$HOME/.tmux.conf"
     "$PROJECT_ROOT/herdr/config.toml":"$HOME/.config/herdr/config.toml"
+    "$PROJECT_ROOT/lazygit/config.yml":"$HOME/Library/Application Support/lazygit/config.yml"
 )
 
 create_symlink() {
