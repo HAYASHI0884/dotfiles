@@ -279,7 +279,6 @@ main() {
     install_with_brew "lazygit"
     install_with_brew "git-delta"
     install_with_brew "uv"
-    install_with_brew "tmux"
     install_with_brew "herdr"
     install_with_brew "playwright-cli"
 
