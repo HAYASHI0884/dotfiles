@@ -9,7 +9,6 @@ files_and_paths=(
     # "$PROJECT_ROOT/mcp/mcp.json":"$HOME/.cursor/mcp.json"
     "$PROJECT_ROOT/ghostty/config":"$HOME/.config/ghostty/config"
     "$PROJECT_ROOT/tmux/tmux.conf":"$HOME/.tmux.conf"
-    "$PROJECT_ROOT/claude/CLAUDE.md":"$HOME/.claude/CLAUDE.md"
     "$PROJECT_ROOT/herdr/config.toml":"$HOME/.config/herdr/config.toml"
 )
 
