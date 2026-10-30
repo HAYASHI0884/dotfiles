@@ -1,0 +1,23 @@
+# Herdr UI overrides. Saved changes reload automatically.
+# Unset keys inherit config-gpui.toml; tables merge key by key.
+
+# New installs start with the roomy rounded sidebar. Remove this line for
+# the managed default, or pick another layout listed in config-gpui.toml.
+layout = "comfortable-rounded"
+theme = "Ghostty Default Style Dark"
+show_gpu_load = false
+
+[backdrop]
+opacity = 0.85
+
+[status_bar]
+usage = "detailed"
+system_load = "detailed"
+
+[terminal]
+family = "Hack Nerd Font Mono"
+
+[code]
+license_accepted = true
+port = 64179
+mode = "start"
