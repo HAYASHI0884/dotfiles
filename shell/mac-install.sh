@@ -98,6 +98,35 @@ install_with_brew() {
     fi
 }
 
+# brew caskでアプリ・フォントをインストール（brew list --caskで存在確認）
+install_with_brew_cask() {
+    local cask=$1
+    log_info "Checking for $cask (cask)..."
+
+    if ! command_exists brew; then
+        log_error "Homebrew is not installed. Please install Homebrew first."
+        FAILED+=("$cask")
+        return 1
+    fi
+
+    if brew list --cask "$cask" >/dev/null 2>&1; then
+        log_warn "$cask is already installed. Skipping."
+        SKIPPED+=("$cask")
+        return 0
+    fi
+
+    log_info "Installing $cask with Homebrew Cask..."
+    if brew install --cask "$cask"; then
+        log_success "$cask installed successfully"
+        INSTALLED+=("$cask")
+        return 0
+    else
+        log_error "Failed to install $cask"
+        FAILED+=("$cask")
+        return 1
+    fi
+}
+
 # nvmをbrewでインストール（コマンドが存在しない場合でもformulaの有無で判定）
 install_nvm_with_brew() {
     log_info "Checking for nvm..."
@@ -281,6 +310,9 @@ main() {
     install_with_brew "uv"
     install_with_brew "herdr"
     install_with_brew "playwright-cli"
+
+    # caskでインストールするもの（フォント等）
+    install_with_brew_cask "font-hack-nerd-font"
 
     # Claude Code用スキルの配置
     install_skill "herdr" "herdr" generate_herdr_skill
