@@ -1,0 +1,16 @@
+# chezmoi管理外のファイル・ディレクトリ
+
+# ドキュメント
+README.md
+
+# インストール・設定スクリプト（run_onceへの移行完了後に削除予定）
+shell/
+
+# ツール別設定（chezmoi管理対象外）
+cursor/
+mcp/
+vscode/
+claude/
+
+# マシン固有の設定（gitに入れない）
+.claude/settings.local.json
