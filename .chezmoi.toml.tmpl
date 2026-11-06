@@ -1,0 +1,6 @@
+{{- $claude := promptBool "Install Claude Code?" false -}}
+{{- $codex  := promptBool "Install Codex?" false -}}
+
+[data]
+  claude = {{ $claude }}
+  codex  = {{ $codex }}
