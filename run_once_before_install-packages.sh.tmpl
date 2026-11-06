@@ -1,0 +1,349 @@
+#!/bin/bash
+# chezmoi run_once_before: 初回セットアップ時のパッケージインストール
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+INSTALLED=()
+SKIPPED=()
+FAILED=()
+
+log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
+log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
+log_warn()    { echo -e "${YELLOW}[WARN]${NC} $1"; }
+log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
+
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+dir_exists()     { [ -d "$1" ]; }
+
+install_with_brew() {
+    local tool=$1
+    log_info "Checking for $tool..."
+    if command_exists "$tool"; then
+        log_warn "$tool is already installed. Skipping."
+        SKIPPED+=("$tool")
+        return 0
+    fi
+    if ! command_exists brew; then
+        log_error "Homebrew is not installed. Please install Homebrew first."
+        FAILED+=("$tool")
+        return 1
+    fi
+    log_info "Installing $tool with Homebrew..."
+    if brew install "$tool"; then
+        log_success "$tool installed successfully"
+        INSTALLED+=("$tool")
+    else
+        log_error "Failed to install $tool"
+        FAILED+=("$tool")
+        return 1
+    fi
+}
+
+install_with_brew_cask() {
+    local cask=$1
+    log_info "Checking for cask: $cask..."
+    if brew list --cask "$cask" >/dev/null 2>&1; then
+        log_warn "$cask is already installed. Skipping."
+        SKIPPED+=("$cask")
+        return 0
+    fi
+    log_info "Installing $cask with Homebrew Cask..."
+    if brew install --cask "$cask"; then
+        log_success "$cask installed successfully"
+        INSTALLED+=("$cask")
+    else
+        log_error "Failed to install $cask"
+        FAILED+=("$cask")
+        return 1
+    fi
+}
+
+install_with_curl() {
+    local name=$1
+    local check_cmd=$2
+    local url=$3
+    log_info "Checking for $name..."
+    if command_exists "$check_cmd" || [ -x "$HOME/.local/bin/$check_cmd" ]; then
+        log_warn "$name is already installed. Skipping."
+        SKIPPED+=("$name")
+        return 0
+    fi
+    log_info "Installing $name..."
+    if curl -fsSL "$url" | bash; then
+        log_success "$name installed successfully"
+        INSTALLED+=("$name")
+    else
+        log_error "Failed to install $name"
+        FAILED+=("$name")
+        return 1
+    fi
+}
+
+install_ohmyzsh() {
+    log_info "Checking for Oh My Zsh..."
+    if dir_exists "$HOME/.oh-my-zsh"; then
+        log_warn "Oh My Zsh is already installed. Skipping."
+        SKIPPED+=("oh-my-zsh")
+        return 0
+    fi
+    log_info "Installing Oh My Zsh..."
+    if sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
+        log_success "Oh My Zsh installed successfully"
+        INSTALLED+=("oh-my-zsh")
+    else
+        log_error "Failed to install Oh My Zsh"
+        FAILED+=("oh-my-zsh")
+        return 1
+    fi
+}
+
+install_ohmyzsh_plugin() {
+    local plugin=$1
+    local repo=$2
+    local plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/$plugin"
+    log_info "Checking for Oh My Zsh plugin: $plugin..."
+    if dir_exists "$plugin_dir"; then
+        log_warn "$plugin plugin is already installed. Skipping."
+        SKIPPED+=("$plugin")
+        return 0
+    fi
+    log_info "Installing $plugin plugin..."
+    if git clone "$repo" "$plugin_dir" 2>/dev/null; then
+        log_success "$plugin plugin installed successfully"
+        INSTALLED+=("$plugin")
+    else
+        log_error "Failed to install $plugin plugin"
+        FAILED+=("$plugin")
+        return 1
+    fi
+}
+
+install_skill() {
+    local name=$1
+    local required_cmd=$2
+    local generator=$3
+    local target_dir="$HOME/.claude/skills/$name"
+    local tmp_dir
+    log_info "Checking for $name skill..."
+    if ! command_exists "$required_cmd"; then
+        log_error "$required_cmd is not installed. Skipping $name skill."
+        FAILED+=("$name-skill")
+        return 1
+    fi
+    tmp_dir=$(mktemp -d)
+    if ! (cd "$tmp_dir" && "$generator") >/dev/null || [ ! -d "$tmp_dir/.claude/skills/$name" ]; then
+        rm -rf "$tmp_dir"
+        log_error "Failed to generate $name skill"
+        FAILED+=("$name-skill")
+        return 1
+    fi
+    if [ -d "$target_dir" ] && diff -r "$tmp_dir/.claude/skills/$name" "$target_dir" >/dev/null 2>&1; then
+        rm -rf "$tmp_dir"
+        log_warn "$name skill is already up to date. Skipping."
+        SKIPPED+=("$name-skill")
+        return 0
+    fi
+    mkdir -p "$(dirname "$target_dir")"
+    rm -rf "$target_dir"
+    mv "$tmp_dir/.claude/skills/$name" "$target_dir"
+    rm -rf "$tmp_dir"
+    log_success "$name skill installed successfully"
+    INSTALLED+=("$name-skill")
+}
+
+generate_herdr_skill()         { mkdir -p .claude/skills/herdr; herdr --skill > .claude/skills/herdr/SKILL.md; }
+generate_playwright_cli_skill() { playwright-cli install --skills; }
+
+print_summary() {
+    echo ""
+    echo "=========================================="
+    echo "  Installation Summary"
+    echo "=========================================="
+    if [ ${#INSTALLED[@]} -gt 0 ]; then
+        echo -e "${GREEN}Installed:${NC}"
+        for item in "${INSTALLED[@]}"; do echo "  - $item"; done
+        echo ""
+    fi
+    if [ ${#SKIPPED[@]} -gt 0 ]; then
+        echo -e "${YELLOW}Skipped (already installed):${NC}"
+        for item in "${SKIPPED[@]}"; do echo "  - $item"; done
+        echo ""
+    fi
+    if [ ${#FAILED[@]} -gt 0 ]; then
+        echo -e "${RED}Failed:${NC}"
+        for item in "${FAILED[@]}"; do echo "  - $item"; done
+        echo ""
+    fi
+    echo "=========================================="
+}
+
+echo "=========================================="
+{{ if eq .chezmoi.os "darwin" -}}
+echo "  Dotfiles Setup (macOS)"
+{{ else -}}
+echo "  Dotfiles Setup (Linux/WSL)"
+{{ end -}}
+echo "=========================================="
+echo ""
+
+{{ if eq .chezmoi.os "linux" -}}
+# zsh (apt)
+log_info "Checking for zsh..."
+if command_exists zsh; then
+    log_warn "zsh is already installed. Skipping."
+    SKIPPED+=("zsh")
+else
+    log_info "Installing zsh with apt..."
+    if sudo apt-get update && sudo apt-get install -y zsh; then
+        log_success "zsh installed successfully"
+        INSTALLED+=("zsh")
+    else
+        log_error "Failed to install zsh"
+        FAILED+=("zsh")
+    fi
+fi
+
+# Linuxbrew
+log_info "Checking for Homebrew (Linuxbrew)..."
+if command_exists brew; then
+    log_warn "Homebrew is already installed. Skipping."
+    SKIPPED+=("brew")
+else
+    log_info "Installing Homebrew (Linuxbrew)..."
+    if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+        log_success "Homebrew installed successfully"
+        INSTALLED+=("brew")
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
+    else
+        log_error "Failed to install Homebrew"
+        FAILED+=("brew")
+    fi
+fi
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" 2>/dev/null || true
+
+{{ else -}}
+# Homebrew (Apple Silicon Mac)
+log_info "Checking for Homebrew..."
+if command_exists brew; then
+    log_warn "Homebrew is already installed. Skipping."
+    SKIPPED+=("brew")
+else
+    log_info "Installing Homebrew..."
+    if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+        log_success "Homebrew installed successfully"
+        INSTALLED+=("brew")
+        eval "$(/opt/homebrew/bin/brew shellenv)" 2>/dev/null || true
+    else
+        log_error "Failed to install Homebrew"
+        FAILED+=("brew")
+    fi
+fi
+eval "$(/opt/homebrew/bin/brew shellenv)" 2>/dev/null || true
+
+{{ end -}}
+# 共通: brew ツール
+install_with_brew "nvim"
+install_with_brew "gh"
+install_with_brew "mise"
+install_with_brew "ctop"
+install_with_brew "peco"
+install_with_brew "lazygit"
+install_with_brew "git-delta"
+install_with_brew "uv"
+install_with_brew "herdr"
+install_with_brew "playwright-cli"
+
+{{ if eq .chezmoi.os "darwin" -}}
+# nvm (brew版)
+log_info "Checking for nvm..."
+if brew list nvm >/dev/null 2>&1; then
+    log_warn "nvm is already installed. Skipping."
+    SKIPPED+=("nvm")
+else
+    log_info "Installing nvm with Homebrew..."
+    if brew install nvm; then
+        mkdir -p "$HOME/.nvm"
+        log_success "nvm installed successfully"
+        INSTALLED+=("nvm")
+    else
+        log_error "Failed to install nvm"
+        FAILED+=("nvm")
+    fi
+fi
+
+# Hack Nerd Font
+install_with_brew_cask "font-hack-nerd-font"
+
+{{ else -}}
+# nvm (curl版)
+log_info "Checking for nvm..."
+if dir_exists "$HOME/.nvm"; then
+    log_warn "nvm is already installed. Skipping."
+    SKIPPED+=("nvm")
+else
+    log_info "Installing nvm..."
+    if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash; then
+        log_success "nvm installed successfully"
+        INSTALLED+=("nvm")
+    else
+        log_error "Failed to install nvm"
+        FAILED+=("nvm")
+    fi
+fi
+
+{{ end -}}
+# Oh My Zsh
+install_ohmyzsh
+
+if dir_exists "$HOME/.oh-my-zsh"; then
+    export ZSH="$HOME/.oh-my-zsh"
+    export ZSH_CUSTOM="$ZSH/custom"
+    install_ohmyzsh_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    install_ohmyzsh_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
+fi
+
+{{ if .claude -}}
+# Claude Code
+install_with_curl "claude-code" "claude" "https://claude.ai/install.sh"
+
+# Claude Code スキル
+install_skill "herdr" "herdr" generate_herdr_skill
+install_skill "playwright-cli" "playwright-cli" generate_playwright_cli_skill
+
+{{ end -}}
+{{ if .codex -}}
+# Codex CLI (npm)
+log_info "Checking for Codex CLI..."
+if command_exists codex; then
+    log_warn "Codex is already installed. Skipping."
+    SKIPPED+=("codex")
+else
+    # nvm を読み込んで npm を使用
+    export NVM_DIR="$HOME/.nvm"
+    {{ if eq .chezmoi.os "darwin" -}}
+    [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+    {{ else -}}
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    {{ end -}}
+    if command_exists npm; then
+        if npm install -g @openai/codex; then
+            log_success "Codex installed successfully"
+            INSTALLED+=("codex")
+        else
+            log_error "Failed to install Codex"
+            FAILED+=("codex")
+        fi
+    else
+        log_warn "npm not available. Install Node.js via nvm first, then run: npm install -g @openai/codex"
+        SKIPPED+=("codex")
+    fi
+fi
+
+{{ end -}}
+print_summary
